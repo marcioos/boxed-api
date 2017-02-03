@@ -1,0 +1,39 @@
+server:
+  registerDefaultExceptionMappers: false
+  requestLog:
+    appenders:
+      - type: console
+  applicationConnectors:
+    - type: http
+      port: 8085
+  adminConnectors:
+    - type: http
+      port: 8086
+  gzip:
+    enabled: false
+
+logging:
+  appenders:
+    - type: json
+      threshold: INFO
+      currentLogFilename: "boxed-api.log.json"
+      archivedLogFilenamePattern: "boxed-api-%d-%i.log.json.gz"
+      archivedFileCount: 3
+      timestampFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+      timestampFormatTimeZoneId: "UTC"
+      maxFileSize: 5GB
+
+database:
+  driverClass: org.postgresql.Driver
+  user: boxed
+  password: boxed
+  url: jdbc:postgresql://db:5432/boxed
+  properties:
+    charSet: UTF-8
+  maxWaitForConnection: 1s
+  validationQuery: SELECT 1
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: true
+
+skipCertificateValidation: true

@@ -1,0 +1,34 @@
+server:
+  registerDefaultExceptionMappers: false
+  requestLog:
+    appenders:
+      - type: console
+  applicationConnectors:
+    - type: http
+      port: 8085
+  adminConnectors:
+    - type: http
+      port: 8086
+  gzip:
+    enabled: false
+
+logging:
+  appenders:
+    - type: console
+      threshold: ALL
+      logFormat: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSX,UTC} %-5level msg=\"%msg\" uid=\"%X{correlationId}\" src=\"%logger{36}\" tid=\"[%thread]\"%n%ex{4}"
+
+database:
+  driverClass: org.postgresql.Driver
+  user: boxed
+  password: boxed
+  url: jdbc:postgresql://localhost:5432/boxed
+  properties:
+    charSet: UTF-8
+  maxWaitForConnection: 1s
+  validationQuery: SELECT 1
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: true
+
+skipCertificateValidation: true

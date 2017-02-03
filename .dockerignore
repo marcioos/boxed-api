@@ -1,0 +1,8 @@
+config
+apitest
+build
+pgw
+.git
+.gradle
+.idea
+.vagrant
