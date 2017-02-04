@@ -8,11 +8,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class BoxedConfiguration extends Configuration {
+
     @Valid
     @NotNull
     @JsonProperty
     public DataSourceFactory database;
-
-    @JsonProperty
-    public boolean skipCertificateValidation = false;
 }

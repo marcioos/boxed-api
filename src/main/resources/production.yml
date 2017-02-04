@@ -1,5 +1,4 @@
 server:
-  registerDefaultExceptionMappers: false
   requestLog:
     appenders:
       - type: console
@@ -14,14 +13,13 @@ server:
 
 logging:
   appenders:
-    - type: json
+    - type: file
       threshold: INFO
-      currentLogFilename: "boxed-api.log.json"
-      archivedLogFilenamePattern: "boxed-api-%d-%i.log.json.gz"
+      currentLogFilename: "boxed-api.log"
+      archivedLogFilenamePattern: "boxed-api-%d-%i.log.gz"
       archivedFileCount: 3
-      timestampFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSX"
-      timestampFormatTimeZoneId: "UTC"
-      maxFileSize: 5GB
+      logFormat: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSX,UTC} %-5level msg=\"%msg\" uid=\"%X{correlationId}\" src=\"%logger{36}\" tid=\"[%thread]\"%n%ex{4}"
+      maxFileSize: 1GB
 
 database:
   driverClass: org.postgresql.Driver
@@ -35,5 +33,3 @@ database:
   minSize: 8
   maxSize: 32
   checkConnectionWhileIdle: true
-
-skipCertificateValidation: true

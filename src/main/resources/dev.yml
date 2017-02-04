@@ -1,5 +1,4 @@
 server:
-  registerDefaultExceptionMappers: false
   requestLog:
     appenders:
       - type: console
@@ -30,5 +29,3 @@ database:
   minSize: 8
   maxSize: 32
   checkConnectionWhileIdle: true
-
-skipCertificateValidation: true

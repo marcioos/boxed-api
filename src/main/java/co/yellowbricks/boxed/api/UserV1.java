@@ -1,22 +1,32 @@
 package co.yellowbricks.boxed.api;
 
+import co.yellowbricks.boxed.domain.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.jackson.JsonSnakeCase;
 
+import java.util.Optional;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_ABSENT;
+import static java.util.Optional.ofNullable;
 
 @JsonSnakeCase
 @JsonInclude(NON_ABSENT)
 public class UserV1 {
 
-    public final Long id;
-    public final String userName;
-    public final String email;
+    public final String id;
+    public final String name;
+    public final Optional<String> avatarUrl;
 
-    public UserV1(Long id, String userName, String email) {
+    public UserV1(@JsonProperty("id") String id,
+                  @JsonProperty("name") String name,
+                  @JsonProperty("avatar_url") Optional<String> avatarUrl) {
         this.id = id;
-        this.userName = userName;
-        this.email = email;
+        this.name = name;
+        this.avatarUrl = avatarUrl;
+    }
+
+    public static UserV1 fromDomain(User user) {
+        return new UserV1(user.id, user.name, ofNullable(user.avatarUrl));
     }
 }
