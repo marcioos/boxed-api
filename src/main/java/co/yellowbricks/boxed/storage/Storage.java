@@ -7,11 +7,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.exceptions.DBIException;
 import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Singleton
 public class Storage {
@@ -33,35 +35,54 @@ public class Storage {
                            String authenticationMethod,
                            long createdAt,
                            long lastModifiedAt) {
-        try (Handle handle = dbi.open()) {
-            startTransaction(handle);
+        executeDatabaseOperation((handle) -> {
             UserDao userDao = handle.attach(UserDao.class);
-            userDao.insert(id, name, email, password, avatarUrlToInsert, authenticationMethod, createdAt, lastModifiedAt);
-        } catch (UnableToExecuteStatementException e) {
-            if (e.getMessage().contains("boxed_users_email_key")) {
-                throw new EmailAlreadyRegisteredException(e);
+            try {
+                userDao.insert(id,
+                               name,
+                               email,
+                               password,
+                               avatarUrlToInsert,
+                               authenticationMethod,
+                               createdAt,
+                               lastModifiedAt);
+            } catch (UnableToExecuteStatementException e) {
+                if (e.getMessage().contains("boxed_users_email_key")) {
+                    throw new EmailAlreadyRegisteredException(e);
+                }
+                throw e;
             }
-            LOGGER.error("While creating user", e);
-            throw new DatabaseOperationException(e);
-        }  catch (Exception e) {
-            LOGGER.error("While creating user", e);
-            throw new DatabaseOperationException(e);
-        }
-    }
-
-    private void startTransaction(Handle handle) throws SQLException {
-        handle.begin();
-        handle.getConnection().setAutoCommit(true);
+        });
     }
 
     public User readUserById(String userId) {
-        try (Handle handle = dbi.open()) {
-            startTransaction(handle);
+        return executeDatabaseOperation((handle) -> {
             UserDao userDao = handle.attach(UserDao.class);
             return userDao.readById(userId);
-        } catch (Exception e) {
-            LOGGER.error("While reading user", e);
+        });
+    }
+
+    private <T> T executeDatabaseOperation(Function<Handle, T> operation) {
+        try (Handle handle = dbi.open()) {
+            try {
+                handle.begin();
+                T result = operation.apply(handle);
+                handle.commit();
+                return result;
+            } catch (Exception e) {
+                handle.rollback();
+                throw e;
+            }
+        } catch (DBIException e) {
+            LOGGER.error("While executing database operation", e);
             throw new DatabaseOperationException(e);
         }
+    }
+
+    private void executeDatabaseOperation(Consumer<Handle> operation) {
+        executeDatabaseOperation((handle) -> {
+            operation.accept(handle);
+            return null;
+        });
     }
 }
