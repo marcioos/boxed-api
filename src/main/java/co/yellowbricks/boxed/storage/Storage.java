@@ -3,6 +3,8 @@ package co.yellowbricks.boxed.storage;
 import co.yellowbricks.boxed.domain.User;
 import co.yellowbricks.boxed.exception.DatabaseOperationException;
 import co.yellowbricks.boxed.exception.EmailAlreadyRegisteredException;
+import co.yellowbricks.boxed.storage.dao.SessionDao;
+import co.yellowbricks.boxed.storage.dao.UserDao;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.skife.jdbi.v2.DBI;
