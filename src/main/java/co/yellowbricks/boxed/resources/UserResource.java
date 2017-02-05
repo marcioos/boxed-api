@@ -61,12 +61,4 @@ public class UserResource {
 
         return Response.ok(UserV1.fromDomain(user)).build();
     }
-
-    @GET
-    @Path("/{user_id}")
-    public Response read(@PathParam("user_id") String userId) {
-        User user = userService.findUserById(userId);
-
-        return Response.ok(UserV1.fromDomain(user)).build();
-    }
 }

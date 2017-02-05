@@ -12,8 +12,12 @@ import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static java.util.Optional.ofNullable;
 
 @Singleton
 public class Storage {
@@ -55,10 +59,24 @@ public class Storage {
         });
     }
 
-    public User readUserById(String userId) {
+    public Optional<User> findUserById(String userId) {
         return executeDatabaseOperation((handle) -> {
             UserDao userDao = handle.attach(UserDao.class);
-            return userDao.readById(userId);
+            return ofNullable(userDao.findById(userId));
+        });
+    }
+
+    public Optional<User> findUserByEmail(String email) {
+        return executeDatabaseOperation((handle) -> {
+            UserDao userDao = handle.attach(UserDao.class);
+            return ofNullable(userDao.findByEmail(email));
+        });
+    }
+
+    public void storeSession(String sessionToken, String userId) {
+        executeDatabaseOperation((handle) -> {
+            SessionDao sessionDao = handle.attach(SessionDao.class);
+            sessionDao.insert(sessionToken, userId, Instant.now().getEpochSecond());
         });
     }
 

@@ -18,5 +18,9 @@ public interface UserDao {
 
     @SqlQuery("SELECT id, name, email, password, avatar_url, authentication_method, created_at, last_modified_at " +
                       "FROM boxed_users WHERE id = :id")
-    User readById(@Bind("id") String userId);
+    User findById(@Bind("id") String userId);
+
+    @SqlQuery("SELECT id, name, email, password, avatar_url, authentication_method, created_at, last_modified_at " +
+                      "FROM boxed_users WHERE email = :email")
+    User findByEmail(@Bind("email") String email);
 }

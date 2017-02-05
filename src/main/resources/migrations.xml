@@ -17,7 +17,7 @@
             <column name="email" type="varchar(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="password" type="varchar(255)">
+            <column name="password" type="varchar(128)">
                 <constraints nullable="true"/>
             </column>
             <column name="avatar_url" type="varchar(255)">
@@ -30,6 +30,20 @@
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_at" type="numeric(20,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="marcio">
+        <createTable tableName="boxed_sessions">
+            <column name="session_token" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(255)">
+                <constraints nullable="false" foreignKeyName="fk_session_user" references="boxed_users(id)"/>
+            </column>
+            <column name="created_at" type="numeric(20,0)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

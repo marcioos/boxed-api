@@ -3,6 +3,7 @@ package co.yellowbricks.boxed.service;
 import co.yellowbricks.boxed.domain.AuthenticationMethod;
 import co.yellowbricks.boxed.domain.User;
 import co.yellowbricks.boxed.storage.Storage;
+import com.google.common.hash.Hashing;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -22,7 +23,6 @@ public class UserService {
         this.storage = storage;
     }
 
-
     public User createUser(String name,
                            String email,
                            Optional<String> password,
@@ -35,7 +35,7 @@ public class UserService {
         storage.insertUser(id,
                            name,
                            email,
-                           password.orElse(null),
+                           password.map(UserService::encryptPassword).orElse(null),
                            avatarUrlToInsert,
                            authenticationMethod.name(),
                            now.getEpochSecond(),
@@ -44,7 +44,7 @@ public class UserService {
         return new User(id, name, email, password, avatarUrlToInsert, authenticationMethod, now, now);
     }
 
-    public User findUserById(String userId) {
-        return storage.readUserById(userId);
+    public static String encryptPassword(String password) {
+        return Hashing.sha512().hashUnencodedChars(password).toString();
     }
 }

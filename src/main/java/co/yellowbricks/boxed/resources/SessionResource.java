@@ -1,7 +1,9 @@
 package co.yellowbricks.boxed.resources;
 
 import co.yellowbricks.boxed.api.UserV1;
-import co.yellowbricks.boxed.service.UserService;
+import co.yellowbricks.boxed.domain.User;
+import co.yellowbricks.boxed.service.SessionService;
+import co.yellowbricks.boxed.session.SessionManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -14,8 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import java.util.Optional;
-
+import static co.yellowbricks.boxed.session.SessionManager.SESSION_HEADER_NAME;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -24,11 +25,13 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Singleton
 public class SessionResource {
 
-    private final UserService userService;
+    private final SessionService sessionService;
+    private final SessionManager sessionManager;
 
     @Inject
-    public SessionResource(UserService userService) {
-        this.userService = userService;
+    public SessionResource(SessionService sessionService, SessionManager sessionManager) {
+        this.sessionService = sessionService;
+        this.sessionManager = sessionManager;
     }
 
     @POST
@@ -36,9 +39,13 @@ public class SessionResource {
     @Consumes(APPLICATION_FORM_URLENCODED)
     public Response login(@FormParam("email") @NotNull String email,
                           @FormParam("password") @NotNull String password) {
-        UserV1 loggedUser = new UserV1("id", email.split("@")[0], Optional.empty());
+        sessionService.createSession(email, password);
+        User loggedUser = sessionManager.getLoggedUser();
+        String sessionToken = sessionManager.getSessionToken();
 
-        return Response.ok(loggedUser).build();
+        return Response.ok(UserV1.fromDomain(loggedUser))
+                       .header(SESSION_HEADER_NAME, sessionToken)
+                       .build();
     }
 
     @POST
