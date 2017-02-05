@@ -1,8 +1,10 @@
 package co.yellowbricks.boxed.storage;
 
+import co.yellowbricks.boxed.domain.Play;
 import co.yellowbricks.boxed.domain.User;
 import co.yellowbricks.boxed.exception.DatabaseOperationException;
 import co.yellowbricks.boxed.exception.EmailAlreadyRegisteredException;
+import co.yellowbricks.boxed.storage.dao.PlayDao;
 import co.yellowbricks.boxed.storage.dao.SessionDao;
 import co.yellowbricks.boxed.storage.dao.UserDao;
 import com.google.inject.Inject;
@@ -93,6 +95,13 @@ public class Storage {
         executeDatabaseOperation((handle) -> {
             SessionDao sessionDao = handle.attach(SessionDao.class);
             sessionDao.deleteSession(sessionToken);
+        });
+    }
+
+    public void insertPlay(String playId, Long bggGameId, String userId) {
+        executeDatabaseOperation((handle) -> {
+            PlayDao playDao = handle.attach(PlayDao.class);
+            playDao.insert(playId, bggGameId, userId, Instant.now().getEpochSecond());
         });
     }
 

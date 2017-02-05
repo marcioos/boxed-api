@@ -8,7 +8,7 @@
 
     <changeSet id="1" author="marcio">
         <createTable tableName="boxed_users">
-            <column name="id" type="varchar(255)">
+            <column name="user_id" type="varchar(64)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -40,10 +40,30 @@
             <column name="session_token" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="varchar(255)">
+            <column name="user_id" type="varchar(64)">
                 <constraints nullable="false"
                              foreignKeyName="fk_session_user"
-                             references="boxed_users(id)"
+                             references="boxed_users(user_id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="created_at" type="numeric(20,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="marcio">
+        <createTable tableName="user_plays">
+            <column name="play_id" type="varchar(64)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="bgg_game_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(64)">
+                <constraints nullable="false"
+                             foreignKeyName="fk_play_user"
+                             references="boxed_users(user_id)"
                              deleteCascade="true"/>
             </column>
             <column name="created_at" type="numeric(20,0)">
