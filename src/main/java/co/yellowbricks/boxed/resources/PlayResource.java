@@ -45,7 +45,10 @@ public class PlayResource {
     @DELETE
     @Path("/{play_id}")
     @RequiresSession
-    public Response deletePlay(@PathParam("play_id") @NotNull Long bggGameId) {
+    public Response deletePlay(@PathParam("play_id") @NotNull String playId) {
+        String userId = sessionManager.getLoggedUser().userId;
+
+        playService.deletePlay(playId, userId);
         return Response.ok().build();
     }
 }

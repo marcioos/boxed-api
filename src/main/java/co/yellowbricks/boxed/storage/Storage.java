@@ -105,6 +105,20 @@ public class Storage {
         });
     }
 
+    public Play findPlayById(String playId) {
+        return executeDatabaseOperation((handle) -> {
+            PlayDao playDao = handle.attach(PlayDao.class);
+            return playDao.findById(playId);
+        });
+    }
+
+    public void deletePlay(String playId) {
+        executeDatabaseOperation((handle) -> {
+            PlayDao playDao = handle.attach(PlayDao.class);
+            playDao.delete(playId);
+        });
+    }
+
     private <T> T executeDatabaseOperation(Function<Handle, T> operation) {
         try (Handle handle = dbi.open()) {
             try {

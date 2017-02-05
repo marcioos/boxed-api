@@ -1,6 +1,7 @@
 package co.yellowbricks.boxed.service;
 
 import co.yellowbricks.boxed.domain.Play;
+import co.yellowbricks.boxed.exception.UnauthorizedOperationException;
 import co.yellowbricks.boxed.storage.Storage;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -23,5 +24,15 @@ public class PlayService {
         storage.insertPlay(playId, bggGameId, userId);
 
         return new Play(playId, bggGameId, userId);
+    }
+
+    public void deletePlay(String playId, String userId) {
+        Play play = storage.findPlayById(playId);
+
+        if (!play.userId.equals(userId)) {
+            throw new UnauthorizedOperationException();
+        }
+
+        storage.deletePlay(playId);
     }
 }
