@@ -1,6 +1,6 @@
 package co.yellowbricks.boxed.exception;
 
-import co.yellowbricks.boxed.error.BoxedError;
+import co.yellowbricks.boxed.api.ErrorV1;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -15,7 +15,7 @@ public class EmailAlreadyRegisteredException extends BoxedException {
 
     public Response toResponse() {
         return Response.status(BAD_REQUEST)
-                       .entity(BoxedError.EMAIL_ALREADY_EXISTS)
+                       .entity(ErrorV1.EMAIL_ALREADY_EXISTS)
                        .type(MediaType.APPLICATION_JSON)
                        .build();
     }
