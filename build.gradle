@@ -6,7 +6,7 @@ apply plugin: 'groovy'
 
 project.group = 'co.yellowbricks.boxed'
 project.archivesBaseName = 'boxed-api'
-project.version = "0.0.1.$buildId"
+project.version = "1.0.0"
 
 sourceCompatibility = 8
 targetCompatibility = 8
@@ -15,9 +15,6 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
-        maven {
-            url "https://nexus.int.klarna.net/content/repositories/gradle-plugins-m2-proxy/"
-        }
     }
 }
 
@@ -34,7 +31,7 @@ configurations.all {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14.1'
+    gradleVersion = '3.3'
 }
 
 repositories {
@@ -70,9 +67,7 @@ jar {
         attributes 'Build-Date': new Date(),
                    'Build-JDK': System.getProperty('java.version'),
                    'Main-Class': "$mainClassName",
-                   'Class-Path': manifestClasspath,
-                   'Klarna-Service-Name': "$project.archivesBaseName",
-                   'Klarna-Service-Version': "$project.version"
+                   'Class-Path': manifestClasspath
     }
 }
 
