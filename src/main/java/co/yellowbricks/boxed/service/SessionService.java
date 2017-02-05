@@ -35,7 +35,7 @@ public class SessionService {
     private void createSessionForUser(User user) {
         String sessionToken = UUID.randomUUID().toString();
 
-        storage.storeSession(sessionToken, user.id);
+        storage.storeSession(sessionToken, user.userId);
         sessionManager.setLoggedUser(user, sessionToken);
     }
 

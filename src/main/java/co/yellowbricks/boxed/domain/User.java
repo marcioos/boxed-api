@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public class User {
 
-    public final String id;
+    public final String userId;
     public final String name;
     public final String email;
     public final Optional<String> password;
@@ -14,7 +14,7 @@ public class User {
     public final Instant createdAt;
     public final Instant lastModifiedAt;
 
-    public User(String id,
+    public User(String userId,
                 String name, 
                 String email, 
                 Optional<String> password,
@@ -22,7 +22,7 @@ public class User {
                 AuthenticationMethod authenticationMethod,
                 Instant createdAt, 
                 Instant lastModifiedAt) {
-        this.id = id;
+        this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
