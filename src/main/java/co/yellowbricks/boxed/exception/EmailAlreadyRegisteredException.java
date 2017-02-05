@@ -5,7 +5,7 @@ import co.yellowbricks.boxed.error.BoxedError;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 public class EmailAlreadyRegisteredException extends BoxedException {
 
@@ -14,7 +14,7 @@ public class EmailAlreadyRegisteredException extends BoxedException {
     }
 
     public Response toResponse() {
-        return Response.status(HTTP_BAD_REQUEST)
+        return Response.status(BAD_REQUEST)
                        .entity(BoxedError.EMAIL_ALREADY_EXISTS)
                        .type(MediaType.APPLICATION_JSON)
                        .build();

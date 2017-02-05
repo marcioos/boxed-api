@@ -6,6 +6,7 @@ import co.yellowbricks.boxed.exception.mapper.BoxedExceptionMapper;
 import co.yellowbricks.boxed.resources.PlayResource;
 import co.yellowbricks.boxed.resources.SessionResource;
 import co.yellowbricks.boxed.resources.UserResource;
+import co.yellowbricks.boxed.session.SessionRequiredFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
@@ -44,6 +45,11 @@ public class BoxedServiceStartup extends Application<BoxedConfiguration> {
         Injector injector = createInjector(configuration, environment);
         registerResources(environment, injector);
         registerExceptionMappers(environment);
+        registerFilters(environment, injector);
+    }
+
+    private void registerFilters(Environment environment, Injector injector) {
+        environment.jersey().register(injector.getInstance(SessionRequiredFeature.class));
     }
 
     private void registerResources(Environment environment, Injector injector) {

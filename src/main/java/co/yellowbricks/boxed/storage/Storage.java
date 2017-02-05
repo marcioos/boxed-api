@@ -80,6 +80,13 @@ public class Storage {
         });
     }
 
+    public Optional<User> findUserBySessionToken(String sessionToken) {
+        return executeDatabaseOperation((handle) -> {
+            SessionDao sessionDao = handle.attach(SessionDao.class);
+            return ofNullable(sessionDao.findLoggedUser(sessionToken));
+        });
+    }
+
     private <T> T executeDatabaseOperation(Function<Handle, T> operation) {
         try (Handle handle = dbi.open()) {
             try {

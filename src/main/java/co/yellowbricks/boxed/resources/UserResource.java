@@ -5,6 +5,7 @@ import co.yellowbricks.boxed.api.UserV1;
 import co.yellowbricks.boxed.domain.AuthenticationMethod;
 import co.yellowbricks.boxed.domain.User;
 import co.yellowbricks.boxed.service.UserService;
+import co.yellowbricks.boxed.session.RequiresSession;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -34,19 +35,20 @@ public class UserResource {
 
     @GET
     @Path("/{user_id}/friends")
-    public Response getFriends(@PathParam("user_id") Long userId) {
+    public Response getFriends(@PathParam("user_id") String userId) {
         return Response.ok().build();
     }
 
     @GET
     @Path("/{user_id}/plays")
-    public Response getPlays(@PathParam("user_id") Long userId) {
+    public Response getPlays(@PathParam("user_id") String userId) {
         return Response.ok().build();
     }
 
     @GET
     @Path("/{user_id}/games")
-    public Response getGames(@PathParam("user_id") Long userId) {
+    @RequiresSession
+    public Response getGames(@PathParam("user_id") String userId) {
         return Response.ok().build();
     }
 
