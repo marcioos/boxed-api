@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -116,6 +117,13 @@ public class Storage {
         executeDatabaseOperation((handle) -> {
             PlayDao playDao = handle.attach(PlayDao.class);
             playDao.delete(playId);
+        });
+    }
+
+    public List<Play> findAllPlaysForUser(String userId) {
+        return executeDatabaseOperation((handle) -> {
+            PlayDao playDao = handle.attach(PlayDao.class);
+            return playDao.findByUserId(userId);
         });
     }
 

@@ -1,6 +1,7 @@
 package co.yellowbricks.boxed.resources;
 
 import co.yellowbricks.boxed.api.PlayV1;
+import co.yellowbricks.boxed.domain.Play;
 import co.yellowbricks.boxed.service.PlayService;
 import co.yellowbricks.boxed.session.RequiresSession;
 import co.yellowbricks.boxed.session.SessionManager;
@@ -9,12 +10,15 @@ import com.google.inject.Singleton;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/play")
@@ -50,5 +54,18 @@ public class PlayResource {
 
         playService.deletePlay(playId, userId);
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/all/{user_id}")
+    @RequiresSession
+    public Response getPlays(@PathParam("user_id") String userId) {
+        List<Play> allPlaysForUser = playService.findAllPlaysForUser(userId);
+
+        List<PlayV1> plays = allPlaysForUser.stream()
+                                            .map(PlayV1::fromDomain)
+                                            .collect(toList());
+
+        return Response.ok(plays).build();
     }
 }

@@ -5,16 +5,13 @@ import co.yellowbricks.boxed.api.UserV1;
 import co.yellowbricks.boxed.domain.AuthenticationMethod;
 import co.yellowbricks.boxed.domain.User;
 import co.yellowbricks.boxed.service.UserService;
-import co.yellowbricks.boxed.session.RequiresSession;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
@@ -31,25 +28,6 @@ public class UserResource {
     @Inject
     public UserResource(UserService userService) {
         this.userService = userService;
-    }
-
-    @GET
-    @Path("/{user_id}/friends")
-    public Response getFriends(@PathParam("user_id") String userId) {
-        return Response.ok().build();
-    }
-
-    @GET
-    @Path("/{user_id}/plays")
-    public Response getPlays(@PathParam("user_id") String userId) {
-        return Response.ok().build();
-    }
-
-    @GET
-    @Path("/{user_id}/games")
-    @RequiresSession
-    public Response getGames(@PathParam("user_id") String userId) {
-        return Response.ok().build();
     }
 
     @POST

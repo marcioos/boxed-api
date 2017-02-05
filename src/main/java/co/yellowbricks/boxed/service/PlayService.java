@@ -6,6 +6,7 @@ import co.yellowbricks.boxed.storage.Storage;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.List;
 import java.util.UUID;
 
 @Singleton
@@ -34,5 +35,9 @@ public class PlayService {
         }
 
         storage.deletePlay(playId);
+    }
+
+    public List<Play> findAllPlaysForUser(String userId) {
+        return storage.findAllPlaysForUser(userId);
     }
 }

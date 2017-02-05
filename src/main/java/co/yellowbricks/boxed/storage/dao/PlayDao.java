@@ -7,6 +7,8 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
+import java.util.List;
+
 @RegisterMapper(PlayRowMapper.class)
 public interface PlayDao {
 
@@ -22,4 +24,7 @@ public interface PlayDao {
 
     @SqlUpdate("DELETE FROM user_plays WHERE play_id = :play_id")
     void delete(@Bind("play_id") String playId);
+
+    @SqlQuery("SELECT play_id, bgg_game_id, user_id FROM user_plays WHERE user_id = :user_id ORDER BY created_at DESC")
+    List<Play> findByUserId(@Bind("user_id") String userId);
 }
