@@ -3,6 +3,7 @@ package co.yellowbricks.boxed.resources;
 import co.yellowbricks.boxed.api.UserV1;
 import co.yellowbricks.boxed.domain.User;
 import co.yellowbricks.boxed.service.SessionService;
+import co.yellowbricks.boxed.session.RequiresSession;
 import co.yellowbricks.boxed.session.SessionManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response;
 import static co.yellowbricks.boxed.session.SessionManager.SESSION_HEADER_NAME;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.Response.Status.NOT_IMPLEMENTED;
 
 @Path("/session")
 @Produces(APPLICATION_JSON)
@@ -53,12 +55,15 @@ public class SessionResource {
     @Consumes(APPLICATION_FORM_URLENCODED)
     public Response fbLogin(@FormParam("fb_user_id") String fbUserId,
                             @FormParam("fb_access_token") String fbAccessToken) {
-        return Response.ok().build();
+        return Response.status(NOT_IMPLEMENTED).build();
     }
 
     @DELETE
     @Path("/logout")
+    @RequiresSession
     public Response logout() {
-        return Response.ok().build();
+        sessionService.deleteSession();
+
+        return Response.ok().header(SESSION_HEADER_NAME, null).build();
     }
 }

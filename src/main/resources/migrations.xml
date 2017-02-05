@@ -41,7 +41,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="varchar(255)">
-                <constraints nullable="false" foreignKeyName="fk_session_user" references="boxed_users(id)"/>
+                <constraints nullable="false"
+                             foreignKeyName="fk_session_user"
+                             references="boxed_users(id)"
+                             deleteCascade="true"/>
             </column>
             <column name="created_at" type="numeric(20,0)">
                 <constraints nullable="false"/>

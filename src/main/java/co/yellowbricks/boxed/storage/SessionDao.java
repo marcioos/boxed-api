@@ -17,4 +17,7 @@ public interface SessionDao {
               "FROM boxed_sessions s JOIN boxed_users u ON s.user_id = u.id " +
               "WHERE s.session_token = :session_token")
     User findLoggedUser(@Bind("session_token") String sessionToken);
+
+    @SqlUpdate("DELETE FROM boxed_sessions WHERE session_token = :session_token")
+    void deleteSession(@Bind("session_token") String sessionToken);
 }

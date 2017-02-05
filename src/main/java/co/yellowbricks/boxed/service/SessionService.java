@@ -28,6 +28,10 @@ public class SessionService {
         createSessionForUser(authenticatedUser);
     }
 
+    public void deleteSession() {
+        storage.deleteSession(sessionManager.getSessionToken());
+    }
+
     private void createSessionForUser(User user) {
         String sessionToken = UUID.randomUUID().toString();
 

@@ -87,6 +87,13 @@ public class Storage {
         });
     }
 
+    public void deleteSession(String sessionToken) {
+        executeDatabaseOperation((handle) -> {
+            SessionDao sessionDao = handle.attach(SessionDao.class);
+            sessionDao.deleteSession(sessionToken);
+        });
+    }
+
     private <T> T executeDatabaseOperation(Function<Handle, T> operation) {
         try (Handle handle = dbi.open()) {
             try {
